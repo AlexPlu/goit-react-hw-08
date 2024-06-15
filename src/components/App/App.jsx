@@ -1,30 +1,37 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { fetchContacts } from "../../redux/contactsOps";
-import ContactForm from "../ContactForm/ContactForm";
-import ContactList from "../ContactList/ContactList";
-import SearchBox from "../SearchBox/SearchBox";
-import { Container, Typography, Box } from "@mui/material";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { refreshUser } from "./redux/auth/operations";
+import { Container } from "@mui/material";
+import HomePage from "./pages/HomePage";
+import RegistrationPage from "./pages/RegistrationPage";
+import LoginPage from "./pages/LoginPage";
+import ContactsPage from "./pages/ContactsPage";
+import PrivateRoute from "./components/PrivateRoute";
+import RestrictedRoute from "./components/RestrictedRoute";
+import Layout from "./components/Layout";
 
-function App() {
+const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchContacts());
+    dispatch(refreshUser());
   }, [dispatch]);
 
   return (
-    <Container maxWidth="lg">
-      <Box mt={5}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Phonebook
-        </Typography>
-        <ContactForm />
-        <SearchBox />
-        <ContactList />
-      </Box>
-    </Container>
+    <Router>
+      <Layout>
+        <Container>
+          <Switch>
+            <Route exact path="/" component={HomePage} />
+            <RestrictedRoute path="/register" component={RegistrationPage} />
+            <RestrictedRoute path="/login" component={LoginPage} />
+            <PrivateRoute path="/contacts" component={ContactsPage} />
+          </Switch>
+        </Container>
+      </Layout>
+    </Router>
   );
-}
+};
 
 export default App;
