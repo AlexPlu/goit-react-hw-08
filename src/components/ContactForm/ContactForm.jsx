@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { addContact } from "../../redux/contactsOps";
+import { addContact } from "../../redux/contacts/operations";
 import { TextField, Button, Box } from "@mui/material";
 
 const ContactForm = () => {

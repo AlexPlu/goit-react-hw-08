@@ -10,7 +10,7 @@ const UserMenu = () => {
   return (
     <div>
       <Typography variant="h6" component="span">
-        {user.name}
+        Welcome, {user.name}
       </Typography>
       <Button color="inherit" onClick={() => dispatch(logout())}>
         Logout

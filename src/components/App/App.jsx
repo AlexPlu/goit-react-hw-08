@@ -1,36 +1,44 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { refreshUser } from "./redux/auth/operations";
+import { useEffect, lazy, Suspense } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Route, Routes } from "react-router-dom";
+import { refreshUser } from "../../redux/auth/operations";
+import { selectIsRefreshing } from "../../redux/auth/selectors";
 import { Container } from "@mui/material";
-import HomePage from "./pages/HomePage";
-import RegistrationPage from "./pages/RegistrationPage";
-import LoginPage from "./pages/LoginPage";
-import ContactsPage from "./pages/ContactsPage";
-import PrivateRoute from "./components/PrivateRoute";
-import RestrictedRoute from "./components/RestrictedRoute";
-import Layout from "./components/Layout";
+import PrivateRoute from "../PrivateRoute";
+import RestrictedRoute from "../RestrictedRoute";
+import Layout from "../Layout";
+
+const HomePage = lazy(() => import("../../pages/HomePage"));
+const RegistrationPage = lazy(() => import("../../pages/RegistrationPage"));
+const LoginPage = lazy(() => import("../../pages/LoginPage"));
+const ContactsPage = lazy(() => import("../../pages/ContactsPage"));
 
 const App = () => {
   const dispatch = useDispatch();
+  const isRefreshing = useSelector(selectIsRefreshing);
 
   useEffect(() => {
     dispatch(refreshUser());
   }, [dispatch]);
 
-  return (
-    <Router>
-      <Layout>
-        <Container>
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <RestrictedRoute path="/register" component={RegistrationPage} />
-            <RestrictedRoute path="/login" component={LoginPage} />
-            <PrivateRoute path="/contacts" component={ContactsPage} />
-          </Switch>
-        </Container>
-      </Layout>
-    </Router>
+  return isRefreshing ? (
+    <p>Loading...</p>
+  ) : (
+    <Layout>
+      <Container>
+        <Suspense fallback={<p>Loading...</p>}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/register"
+              element={<RestrictedRoute redirectTo="/contacts" component={<RegistrationPage />} />}
+            />
+            <Route path="/login" element={<RestrictedRoute redirectTo="/contacts" component={<LoginPage />} />} />
+            <Route path="/contacts" element={<PrivateRoute redirectTo="/login" component={<ContactsPage />} />} />
+          </Routes>
+        </Suspense>
+      </Container>
+    </Layout>
   );
 };
 
