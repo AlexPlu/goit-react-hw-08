@@ -5,6 +5,7 @@ import ReactDOM from "react-dom/client";
 import App from "./components/App/App";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { BrowserRouter } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import CssBaseline from "@mui/material/CssBaseline";
 import "./index.css";
 
@@ -28,6 +29,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
+          <Toaster position="top-center" reverseOrder={false} />
           <App />
         </BrowserRouter>
       </ThemeProvider>
