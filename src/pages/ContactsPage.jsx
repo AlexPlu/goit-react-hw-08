@@ -4,6 +4,14 @@ import SearchBox from "../components/SearchBox/SearchBox";
 import ContactList from "../components/ContactList/ContactList";
 
 const ContactsPage = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
+  const isLoading = useSelector(selectIsLoading);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
   return (
     <Container maxWidth="lg">
       <Box mt={5}>
