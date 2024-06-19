@@ -1,7 +1,7 @@
 import { Container, Box, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { selectIsLoading } from "../redux/contacts/selectors";
+import { selectLoading } from "../redux/contacts/selectors";
 import { fetchContacts } from "../redux/contacts/operations";
 import ContactForm from "../components/ContactForm/ContactForm";
 import SearchBox from "../components/SearchBox/SearchBox";
@@ -9,7 +9,7 @@ import ContactList from "../components/ContactList/ContactList";
 
 const ContactsPage = () => {
   const dispatch = useDispatch();
-  const isLoading = useSelector(selectIsLoading);
+  const isLoading = useSelector(selectLoading);
 
   useEffect(() => {
     dispatch(fetchContacts());
